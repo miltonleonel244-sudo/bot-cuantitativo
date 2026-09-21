@@ -1,6 +1,8 @@
 import telebot
 import requests
 import numpy as np
+from flask import Flask
+import threading
 from datetime import datetime
 import pytz
 
@@ -118,5 +120,18 @@ def cmd_ligamx(mensaje):
     res = procesar_apuestas_bot("soccer_mexico_ligamx", "Liga MX")
     bot.reply_to(mensaje, res, parse_mode="HTML")
 
-print("🟢 Bot inteligente encendido. Ve a Telegram y usa /start")
+# --- SERVIDOR WEB FANTASMA PARA RENDER ---
+app = Flask(__name__)
+
+@app.route('/')
+def inicio():
+    return "Servidor del Bot Cuantitativo Activo"
+
+def correr_servidor():
+    app.run(host="0.0.0.0", port=8080)
+
+hilo = threading.Thread(target=correr_servidor)
+hilo.start()
+# -----------------------------------------
+
 bot.infinity_polling()
